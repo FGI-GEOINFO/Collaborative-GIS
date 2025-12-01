@@ -277,9 +277,70 @@ NGINX web server configuration file is for redirecting web traffic and security 
 Note! If using this guides version of Geoserver, it should not be available publicly. In this version there are two security vulnerabilities. It is highly recommended to get a newer version of the Geoserver.
 
 ## HSLayers-server
+HSLayers-server is a server component for the HSLayers map application. The server consists of three services, which are proxy, share and layman authentication service. Proxy is used to access services on other domains and work with CORS headers. Share is used to store and share maps via permalinks. Layman authentication client is needed to authenticate to layman from the map application.
+
+The HSLayers-server was installed and ran inside a docker container. The installation and execution of the application was done utilizing a dockerfile. In addition, for the application to run properly an environment file is needed. The file is created inside Ubuntu environment and then moved inside the docker container using volume bind. A YAML file is modified to include and control the HSLayers-server. Necessary ports and volume bind are added to the file.
+
+CGIS HSLayers-server version:
+2.0.0
 
 ## HSLayers-NG web application
+HSLayers-NG is an angular library which extents OpenLayers functionality to build a map GUI with extra components such as layer manager, permalink generation, vector layer styling, API layers, etc. The library is installed into angular and then a working directory is created to develop and build the CGIS web application.
+
+Depending on the use case, in Angular there are couple ways to develop applications. One of these ways, is to create an Angular working directory for single application. Alternatively, it is possible to create a working directory that contains multiple applications.
+
+Create workspace for single application
+```bash
+ng new cgis
+```
+
+Create a workspace and then generate project folders for multiple applications
+```bash
+ng new cgis --create-application false
+cd cgis
+ng generate application development
+ng generate application production
+```
+
+Run Angular application in development environment
+```bash
+ng serve production –host 0.0.0.0
+```
+
+Build Angular application after development
+```bash
+ng build production
+```
+
+Building Angular application creates a new application folder. Building application also generates a cache that stores information related to the build, which makes following builds faster. Generation of cache can be toggled on or off. The built application folder was copied inside Nginx docker container, so that the web server could find and access the application. The copying was done utilizing docker volume bind.
+
+Note! Every time build is done it generates a cache in the working directory. The caches are not automatically removed at least in this project. When developing check how much disk space the caches take periodically. Remember to remove old caches when they take too much disk space.
+
+Install newest HsLayers package
+```bash
+npm i hslayers-ng
+```
+
+Install HSLayers 13.2.1 package
+```bash
+npm i hslayers-ng@13.2.1
+```
+
+Install peer dependencies for HsLayers 13.2.1 if not installed automatically by npm (optional) (check that package numbers are correct and not old ones)
+```bash
+npm i bootstrap@^5.3 ol@^8.2 @angular/cdk@^17 @angular/common@^17 @angular/core@^17 @angular/forms@^17 @angular/compiler@^17 @angular/platform-browser@^17 @angular/platform-browser-dynamic@^17 @angular/localize@^17 @ngx-translate/core@^15 @ngx-translate/http-loader@^8 deepmerge@^4.0.0 dayjs@^1.0.0 @ng-bootstrap/ng-bootstrap@^16 ol-popup@^5.0.0 proj4@^2.8.1 share-api-polyfill@^1.0.0 rxjs@^7.0.0 zone.js@~0.14.0 xml-js@^1.6.11 ngx-cookie-service@^17 geostyler-style@^7.2.0 geostyler-sld-parser@^5 geostyler-openlayers-parser@^4 geostyler-legend@4 geostyler-qgis-parser@^2 ngx-color@^9 queue@^7 resumablejs@^1 d3@^7 jszip@^3 polygon-splitter@^0.0.11 polygon-clipping@^0.15.3 @popperjs/core@^2 ol-ext@^4
+```
+
+CGIS HSLayers version
+13.2.1
 
 ## Drone landing site analysis tool
+The drone landing site analysis tool is a plugin that was developed for CGIS. The tools is a multi-layer analysis to detect potential drone landing sites from selected datasets. The tool was designed to act as a guide for discussing and planning drone landing sites. The quality of the results is highly dependant on the amount and type of data used.
+
+The analysis tool is activated through the frontend web application (HsLayers), which sends a signal to the backend analysis component to start the analysis process. The script check’s the user’s credentials to determine if the user has right permissions to run the analysis. The analysis reads and loads the data from the CGIS server and inserts the data into the multi-layer analysis. The analysis creates a raster from the input data and sends it to the geoserver.
+The analysis tool was designed to run inside a docker container. The tool was cloned from a GitHub repository and containerized. A dockerfile was created for the containerization process. A YAML file was modified to activate and copy necessary files to the container.
+
+Note! Getting necessary access tokens from the server should be improved in the future. Currently the tokens have to be added manually to the script, which is not ideal. Most likely HsLayer-server could be used to access the authentication service of layman.
+
 
 ## Creating user accounts
