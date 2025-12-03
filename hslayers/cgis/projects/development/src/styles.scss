@@ -1,0 +1,157 @@
+// rgb(55, 122, 178), rgb(0, 78, 132), rgb(150, 181, 57), rgb(55, 109, 73)
+$primary-color: rgb(55, 109, 73);
+$secondary-color: rgb(55, 109, 73);
+$tertiary-color: rgb(0, 78, 132);
+$quaternary-color: rgb(0, 78, 132);
+$white-color: rgb(255, 255, 255);
+$black-color: rgb(0, 0, 0);
+$white-color-transparent: rgb(255, 255, 255, 0.75);
+$black-color-transparent: rgb(0, 0, 0, 0.25);
+$font-size-sm: 12px;
+$font-size-m: 14px;
+$font-size-l: 16px;
+
+:root, :host {
+  --ol-background-color: #{$white-color} !important;
+  --ol-accent-background-color: #{$white-color} !important;
+  --ol-subtle-background-color: #{$white-color-transparent} !important;
+  --ol-partial-background-color: #{$white-color-transparent} !important;
+  --ol-foreground-color:  #{$quaternary-color} !important;
+  --ol-subtle-foreground-color: #{$tertiary-color} !important;
+  --ol-brand-color: #{$tertiary-color} !important;
+}
+
+* {
+  font-family: Lato, Helvetica, Arial, Lucida, sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.logo-tl {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+}
+
+.logo-tl img {
+  width: auto;
+  height: 75px;
+  margin-right: 5px;
+}
+
+.hsl {
+  hs-sidebar, .hs-sidebar-list, .hs-sidebar-item {
+    background-color: #{$white-color};
+    color: #{$primary-color};
+  }
+  .hs-sidebar-item {
+    border: none;
+  }
+  .card-header {
+    background-color: #{$white-color};
+    color: #{$primary-color};
+  }
+  .hs-sidebar-item.active, .hs-sidebar-item:hover {
+    background-color: #{$primary-color};
+    border-color: #{$primary-color};
+    color: #{$white-color};
+  }
+  .btn-primary {
+    --bs-btn-color: #{$white-color};
+    --bs-btn-bg: #{$tertiary-color};
+    --bs-btn-border-color: #{$tertiary-color};
+    --bs-btn-hover-color: #{$white-color};
+    --bs-btn-hover-bg: #{$tertiary-color};
+    --bs-btn-hover-border-color: #{$tertiary-color};
+    --bs-btn-focus-shadow-rgb: #{$tertiary-color};
+    --bs-btn-active-color: #{$white-color};
+    --bs-btn-active-bg: #{$tertiary-color};
+    --bs-btn-active-border-color: #{$tertiary-color};
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #{$white-color};
+    --bs-btn-disabled-bg: #{$tertiary-color};
+    --bs-btn-disabled-border-color: #{$tertiary-color};
+  }
+  input[type="checkbox" i] { 
+    background-color: #{$primary-color};
+  }
+  .btn-outline-primary, .btn-outline-secondary {
+    --bs-btn-color: #{$tertiary-color};
+    --bs-btn-border-color: #{$tertiary-color};
+    --bs-btn-hover-color: #{$white-color};
+    --bs-btn-hover-bg: #{$tertiary-color};
+    --bs-btn-hover-border-color: #{$tertiary-color};
+    --bs-btn-focus-shadow-rgb: #{$tertiary-color};
+    --bs-btn-active-color: #{$white-color};
+    --bs-btn-active-bg: #{$tertiary-color};
+    --bs-btn-active-border-color: #{$tertiary-color};
+    --bs-btn-active-shadow: inset 0 3px 5px #{$tertiary-color};
+    --bs-btn-disabled-color: #{$tertiary-color};
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: #{$tertiary-color};
+    --bs-gradient: none;
+  }
+ .nav-link {
+    --bs-nav-link-color: #{$tertiary-color};
+    --bs-nav-link-hover-color: #{$quaternary-color};
+    --bs-nav-link-disabled-color: #{$tertiary-color};
+    font-size: $font-size-l;
+  }
+  .hs-checkmark::before, .checkbox {
+    background-color: #{$tertiary-color};
+    color: #{$white-color};
+  }
+  .hs-uncheckmark::before {
+    background-color: #{$white-color};
+    box-shadow: inset 0 0 0 0.2em #{$tertiary-color};
+  }
+  .text-primary {
+    color: #{$secondary-color} !important;
+  }
+  .hs-toolbar {
+    top: 10px;
+    right: 10px;
+    left: auto;
+    border: none;
+  }
+  .hs-toolbar-button {
+    border: none;
+  }
+  .basemapGallery {
+    top: 60px;
+    right: 10px;
+  }
+  .input-group-text {
+    font-size: #{$font-size-m};
+  }
+  .btn {
+    font-size: #{$font-size-m};
+  }
+  .alert, .alert-info {
+    background-color: #{$white-color} !important;
+    color: #{$black-color} !important;
+    border: 1px solid var(--bs-danger);
+    font-size: #{$font-size-m};
+  }
+}
+
+.btn-group > button, .input-group > button {
+  border: none;
+}
+
+.logo-container {
+  position: relative;
+  display: inline-block;
+  border-radius: 30px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.7));
+  padding: 10px;
+}
+
+.logo-container img {
+  display: block;
+}

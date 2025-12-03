@@ -1,0 +1,18 @@
+@import '../../styles.scss';
+
+.logout-btn, .login-btn {
+  display: block;
+  background-color: #{$tertiary-color};
+  color: #{$white-color};
+  border: none;
+  padding: 10px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: #{$font-size-m};
+  margin: 50px auto 0;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover, .login-btn:hover {
+  background-color: #{$quaternary-color};
+}

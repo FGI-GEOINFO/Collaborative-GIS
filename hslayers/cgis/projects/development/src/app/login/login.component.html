@@ -1,0 +1,7 @@
+<div *ngIf="isVisible$ | async" class="card mainpanel" [ngClass]="panelWidthClass">
+  <hs-panel-header name="login" [panelTabs]="'Login'" [translationModule]="''"></hs-panel-header>
+  <div class="card-body">
+    <hs-layman-current-user [endpoint]="hsCommonLaymanService.layman$ | async"></hs-layman-current-user>
+    <p><a href="https://<DomainName>/admin/" target="wagtail" class="nav-item">Change user</a></p>
+  </div>
+</div>

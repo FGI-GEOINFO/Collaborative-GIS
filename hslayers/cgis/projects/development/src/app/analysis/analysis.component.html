@@ -1,0 +1,103 @@
+<div *ngIf="isVisible$ | async" class="card mainpanel" [ngClass]="panelWidthClass">
+  <hs-panel-header name="analysis" [selectedTab$]="selectedTab" [panelTabs]="'Analysis,Results,Help'"></hs-panel-header>
+  <ng-container *ngIf="{option: selectedTab | async} as selected">
+    <!-- Analysis Panel -->
+    <div *ngIf="(selected.option === 'Analysis')" class="card-body analysis-body">
+      <form [formGroup]="form">
+        <div *ngIf="activeLayers.length > 0" class="result-title">
+          <label for="resultTitle">{{'ANALYSIS.analysisTab.resultTitle' | translateHs }}:</label>
+          <input id="resultTitle" type="text" formControlName="resultTitle" placeholder="Enter a title for the result" class="result-title-input">
+        </div>
+        <div *ngIf="activeLayers.length > 0" class="bounding-box-display">
+          <label>{{'ANALYSIS.analysisTab.studyArea' | translateHs }}:</label>
+          <p class="bounding-box-display-output">{{boundingBoxDisplay}}</p>
+        </div>
+        <div *ngIf="activeLayers.length > 0" formArrayName="layers" class="layers-grid">
+          <div class="layer-row header-row">
+            <div class="layer-name header-cell">{{'ANALYSIS.analysisTab.layer' | translateHs }}</div>
+            <div class="layer-status header-cell">
+              <span>{{'ANALYSIS.analysisTab.layerStatus' | translateHs }}</span>
+            </div>
+            <div class="layer-weight header-cell">{{'ANALYSIS.analysisTab.weight' | translateHs }}</div>
+          </div>
+          <div *ngFor="let layer of activeLayers; let i = index" formGroupName="{{i}}" class="layer-row">
+            <div class="layer-name">{{ layer.title }}</div>
+            <div class="layer-status">
+              <label><input type="radio" formControlName="status" value="excluded" (change)="onStatusChange(i)"> {{'ANALYSIS.analysisTab.excludedStatus' | translateHs }}</label>
+              <label><input type="radio" formControlName="status" value="analyzable" (change)="onStatusChange(i)"> {{'ANALYSIS.analysisTab.analyzableStatus' | translateHs }}</label>
+              <label><input type="radio" formControlName="status" value="restricted" (change)="onStatusChange(i)"> {{'ANALYSIS.analysisTab.restrictedStatus' | translateHs }}</label>
+            </div>
+            <div class="layer-weight">
+              <ng-container *ngIf="layersFormArray.at(i).get('status')?.value === 'analyzable'; else emptyCell">
+                <input type="number" [formControlName]="'weight'" class="weight-input" (change)="onWeightInputChange(i, $event)" min="-1" max="1" step="0.01">
+                <input type="range" min="-1" max="1" step="0.01" formControlName="weight" class="weight-slider" (input)="onSliderChange(i, $event)">
+              </ng-container>
+              <ng-template #emptyCell>
+                <div class="empty-weight"></div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <button *ngIf="activeLayers.length > 0" (click)="run_analysis()" class="run-btn">{{'ANALYSIS.analysisTab.runAnalysisBtn' | translateHs }}</button>
+        <div *ngIf="activeLayers.length == 0" class="no-active-layers">
+          <p>{{'ANALYSIS.analysisTab.noActiveLayers' | translateHs }}</p>
+        </div>
+      </form>
+    </div>
+    <!-- Results Panel -->
+    <div *ngIf="selected.option === 'Results'" class="card-body results-body">
+      <div *ngIf="results.length > 0; else noResults">
+        <ul class="results-list">
+          <li *ngFor="let result of results; let i = index" class="result-item">
+            <span class="result-name">{{ result.name }}</span>
+            <div class="result-actions">
+              <button (click)="toggleMetadataVisibility(i)" class="btn btn-sm btn-metadata">
+                {{ metadataVisible[i] ? ('ANALYSIS.resultsTab.hideMetadata' | translateHs) : ('ANALYSIS.resultsTab.showMetadata' | translateHs) }}
+              </button>
+            </div>
+            <div class="result-metadata" *ngIf="metadataVisible[i]">
+              <p><strong>{{'ANALYSIS.resultsTab.metadata' | translateHs }}:</strong></p>
+              <pre>{{ result.metadata | json }}</pre>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noResults>
+        <div class="no-results">
+          <p>{{'ANALYSIS.resultsTab.noResults' | translateHs }}</p>
+        </div>
+      </ng-template>
+    </div>
+    <!-- Help Panel -->
+    <div *ngIf="selected.option === 'Help'" class="card-body help-body">
+      <div class="help-content">
+        <h4><u>Analysis</u></h4>
+       <p>
+          The analysis tool allows you to configure and run spatial analysis on layers visible in the Layer Manager.
+          <u>Please notice, only vector layers (WMS) can be included into the analysis, other layer types are filtered.</u>
+       </p>
+       <p><strong>Result title:</strong> Choose a unique title for your analysis result. This will be the name of the created results layer.</p>
+       <p><strong>Study area:</strong> Shows the coordinates of the analysis study area. The analysis will be run on the current map view. Ensure the desired study area is displayed.</p>
+       <p><strong>Status:</strong></p>
+       <ul>
+          <li><strong>On:</strong> Include the layer in the analysis. Choose a weight between -1 and 1, where -1 represents very unsuitable areas (e.g., cemetery, daycare) and 1 represents very suitable areas (e.g., parking lot, bare ground).</li>
+          <li><strong>Off:</strong> Exclude the layer from the analysis.</li>
+          <li><strong>Difference:</strong> Use the layer as a mask to exclude certain areas from the analysis (e.g., waterbodies). This can also define restricted zones (e.g., no-fly zones).</li>
+       </ul>
+       <p><strong>Run Analysis:</strong> Starts the analysis. Once notified that the analysis is complete, the result will be visible in the Data Manager, where you can add it to the Layer Manager.</p>
+       <p><strong>Results panel:</strong> Displays metadata for each analysis ran. The metadata includes the parameters set to each layer in the analysis.</p>
+	   <p><strong>Troubleshooting:</strong></p>
+	   <ul>
+	      <li>Make sure you are logged in with correct user. Only analysis users are able to run the analysis.</li>
+		  <li>The analysis accepts only vector layers (WMS) from layman.</li>
+		  <li>The analysis user must have write permission for all input layers.</li>
+		  <li>Remember to give the analysis result unique name. The system is not able to overwrite files with same names.</li>
+		  <li>Test running the analysis at smaller scale. The server is not able to handle large analysis areas.</li>
+		  <li>Check layer manager for analysis result. The result layer is not loaded to the scene automatically.</li>
+		  <li>In some cases, the analysis throws an error even if the analysis was successful. Check layer manager just in case for the layer.</li>
+	   </ul>
+      </div>
+    </div>
+  </ng-container>
+</div>
+

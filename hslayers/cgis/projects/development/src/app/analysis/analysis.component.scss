@@ -1,0 +1,185 @@
+@import '../../styles.scss';
+
+.card-body {
+  padding: 15px;
+}
+
+.analysis-body, .results-body {
+  background: #{$white-color};
+}
+
+.result-title {
+  margin-bottom: 20px;
+
+  label {
+    font-weight: 600;
+  }
+
+  .result-title-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #{$black-color-transparent};
+  }
+}
+
+.bounding-box-display {
+  margin-bottom: 20px;
+
+  label {
+    font-weight: 600;
+  }
+
+  .bounding-box-display-output {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #{$black-color-transparent};
+  }
+}
+
+.layers-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border: 1px solid #{$black-color-transparent};
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.layer-row,
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+
+  .header-cell {
+    font-weight: bold;
+    text-align: left;
+    position: relative;
+  }
+}
+
+.layer-name {
+  flex: 2;
+  overflow-x: auto;
+}
+
+.layer-status {
+  flex: 3;
+  max-width: 150px;
+  display: flex;
+  position: relative;
+}
+
+.layer-weight {
+  flex: 2;
+  max-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .weight-input,
+  .empty-weight {
+    height: 34px;
+  }
+
+  .weight-input {
+    width: 60px;
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #{$black-color-transparent};
+    border-radius: 4px;
+  }
+
+  .weight-slider {
+    width: 100%;
+    height: 34px;
+  }
+
+  .empty-weight {
+    width: 100%;
+    height: 34px;
+  }
+}
+
+.run-btn {
+  display: block;
+  background-color: #{$tertiary-color};
+  color: #{$white-color};
+  padding: 10px 20px;
+  border-radius: 4px;
+  text-align: center;
+  margin: 30px auto 0;
+}
+
+.no-active-layers, .no-results {
+  text-align: center;
+  color: #{$black-color};
+  font-style: italic;
+}
+
+.results-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  .result-item {
+    padding: 15px;
+    background: #{$white-color};
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+    .result-name {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-toggle, .btn-dismiss, .btn-metadata {
+      background-color: #{$tertiary-color};
+      color: #{$white-color};
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .result-metadata {
+      margin-top: 15px;
+      font-size: 12px;
+      background: #f1f1f1;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #{$black-color-transparent};
+    }
+  }
+}
+
+.help-content {
+  h3 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  ul, ol {
+    margin-left: 20px;
+    margin-bottom: 15px;
+
+    li {
+      margin-bottom: 5px;
+    }
+  }
+
+  strong {
+    font-weight: 600;
+  }
+}

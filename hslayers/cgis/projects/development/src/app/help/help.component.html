@@ -1,0 +1,205 @@
+<div *ngIf="isVisible$ | async" class="card mainpanel" [ngClass]="panelWidthClass">
+  <hs-panel-header name="help" [selectedTab$]="selectedTab" [panelTabs]="'CGIS,General,Analysis'"></hs-panel-header>
+  <ng-container *ngIf="{option: selectedTab | async} as selected">
+    <!-- CGIS intro tab -->
+    <div *ngIf="(selected.option === 'CGIS')" class="card-body analysis-body">
+       <h4><u>Collaborative GIS</u></h4>
+       <p>
+          Collaborative GIS (CGIS) is webmap platform intended for collaborative planning.
+          As a Spatial Decision Support System (SDSS) that enables collaborative planning,
+          in CGIS participants can work together on a shared map workspace each on their own devices.
+          The key features of CGIS are:
+       </p>
+       <ul>
+          <li>a map user interface (e.g. offering a shared perspective to the planning situation)</li>
+          <li>a workspace manager (e.g. managing different projects)</li>
+          <li>a data manager (e.g. importing data or connecting to external APIs)</li>
+          <li>a layer manager (e.g. overlaying data)</li>
+          <li>map drawing tools (e.g. sketching planning ideas)</li>
+          <li>an analysis tool (e.g. running on-the-fly analysis on imported data).</li>
+       </ul>
+       <p>
+           For example, the CGIS platform can be used by multiple people working together to discuss, plan, and decide the locations of drone in a box sites, where drones are recharged and stored.
+       </p>
+
+       <img src="https://interreg-baltic.eu/wp-content/uploads/2023/03/CITYAM_Logo_Standard_large.png" width="380" height="auto">
+    </div>
+    <!-- General tab -->
+    <div *ngIf="(selected.option === 'General')" class="card-body analysis-body">
+       <h4><u>Workspaces</u></h4>
+       <p>In Workspaces you can login to the system and open, delete, share, and set permissions for workspaces.</p>
+       <p>
+          <strong>Login to Catalogue:</strong> You can login to the system using the Layman Portal. When asked about application permissions, authorize reading and writing permissions.<br>
+          <strong>Reload:</strong> Reload the list of workspaces<br>
+          <strong>Import a workspace from a file on device:</strong> Import your own workspace as a JSON-file.<br>
+          <strong>Add workspace by address:</strong> Import your own workspace using a URL.<br>
+       </p>
+       <p><strong>Searching and Filtering Workspaces</strong></p>
+       <ul>
+          <li><strong>Search:</strong> You can search for a certain workspace.</li>
+          <li><strong>Filter by map extent:</strong> When selected only workspaces that reach the current map extent are shown.</li>
+          <li><strong>Only mine:</strong> When selected shows only workspaces that have been created by the user logged in.</li>
+          <li><strong>More:</strong> Gives you options to filter with keywords and INSPIRE themes. You can also sort the workspace results by title, date and bounding box.</li>
+       </ul>
+       <p><strong>Opening a Workspace</strong> (Click the name of the workspace in question):</p>
+       <ul>
+          <li><strong>Open:</strong> Open the selected workspace</li>
+          <li><strong>Metadata:</strong> Shows thumbnail, URL to the workspace and has a link to the full metadata record</li>
+          <li><strong>Share:</strong> Not in use, workspaces cannot be shared into a social network.</li>
+          <li><strong>Set permissions:</strong> Select and confirm read and write access rights to be public or private. The rights can be set for everyone or per user.</li>
+          <li><strong>Delete:</strong> Delete the workspace.</li>
+       </ul>
+       <br>
+
+       <h4><u>Data Manager</u></h4>
+       <p>
+           In Data Manager, you can set permissions for users and remove layers.
+           You can also add layers to the map and import data via URL or from a file.
+           Additionally, you can login to your account and logout.
+       </p>
+
+       <p><strong>Searching and Filtering Data</strong></p>
+       <ul>
+          <li><strong>Search:</strong> You can search for certain data.</li>
+          <li><strong>Filter by map extent:</strong> When selected, only data that reach the current map extent are shown.</li>
+          <li><strong>Only mine:</strong> When selected, shows only datasets that have been created by the logged-in user.</li>
+          <li><strong>More:</strong> Provides options to search within all text, abstract, or title for a dataset. You can also filter to include all data or only services or datasets. Additionally, you can sort the results by title, date, and extent.</li>
+          <li><strong>Arrow bottom right:</strong> Set the record count per page.</li>
+       </ul>
+       <p><strong>Adding Data to the Map</strong> (Click the name of the data in question):</p>
+       <ul>
+          <li><strong>Add to map:</strong> Add the selected data as a WMS layer. From the arrow, you can also set the type as WMTS or WFS.</li>
+          <li><strong>Metadata:</strong> Displays layer metadata with a link to the full metadata record. You can also add the data to the map as WMS, WMTS, or WFS and zoom to the layer.</li>
+          <li><strong>Set permissions:</strong> Define read and write access rights (public or private). These rights can be set for everyone or specific users.</li>
+          <li><strong>Remove layer:</strong> Remove data from the Data Manager.</li>
+       </ul>
+       <p><strong>URL:</strong> You can add data using one of the following formats: WMS, WMTS, WFS, KML, GPX, GeoJSON, ArcGIS Map Server</p>
+       <p><strong>File:</strong> You can add data from your device using one of the following formats: KML, GPX,GeoJSON, Shapefile, Raster image, Raster rime series. Data can be imported eith by dragging and dropping files or by selecting files from a directory</p>
+           <br>
+
+       <h4><u>Layer Manager</u></h4>
+       <p>
+          In Layer Manager, you can toggle the visibility of layers added to the map as well as edit their opacity or styling.
+          The styling options available depend on the format/file type of the layer. You can also rename layers and zoom to their extent.
+          Layers can also be reordered.
+       </p>
+       <p>
+          <strong>Reorder:</strong> Change the order of layers by dragging the layers.<br>
+          <strong>Remove multiple layers:</strong> Remove multiple layers from the map or from both the map and the Data Manager.<br>
+          <strong>Remove all added layers:</strong> Remove all layers from the map or reload the workspace.<br>
+          <strong>Reset map:</strong> Resets the map by removing all added layers and the background map. The background map can be restored by refreshing the browser.<br>
+          <strong>Toggle visibility of all layers:</strong> Make all layers on the map visible or invisible.<br>
+       </p>
+       <p><strong>Additional Information:</strong> Layer options with a link to the metadata in ISO19115:2003:</p>
+       <ul>
+          <li><strong>Ignore layer extent:</strong> Display features or parts of features that extend outside the initial extent.</li>
+          <li><strong>Zoom to layer:</strong> Zoom to the extent of the layer.</li>
+          <li><strong>Edit layer:</strong> Edit the style of a (WFS) layer. This includes adding style rules and color maps.</li>
+          <li><strong>Rename layer:</strong> Rename the layer as it appears in the Layer Manager.</li>
+          <li><strong>Download layer content as GeoJSON:</strong> Download the layer content as a GeoJSON file to your device.</li>
+          <li><strong>Copy layer:</strong> Add a duplicate of the layer to the map.</li>
+          <li><strong>Remove layer:</strong> Remove the layer from the Layer Manager.</li>
+       </ul>
+       <br>
+
+       <h4><u>Draw</u></h4>
+       <p>
+          In Draw, you can create point, line, and polygon features in user-generated layers.
+          Additionally, you can perform operations on and between drawn layer features (difference, union, intersection, split).
+          While drawing polygons or lines, hold SHIFT to free-hand draw. Use the Backspace key to delete the last point.
+       </p>
+       <p><strong>New Drawing Layer</strong></p>
+       <ul>
+          <li><strong>Add new draw layer:</strong> Create a new empty layer for drawing, which can later be managed in the Layer Manager.</li>
+          <li><strong>Load layer from server:</strong> Choose one of your server layers to draw on (e.g., a layer previously created or an analysis layer).</li>
+          <li><strong>Layer title:</strong> Specify a title when creating a new layer.</li>
+          <li><strong>Access rights:</strong> Define read and write permissions for everyone or specific users.</li>
+          <li><strong>Advanced options:</strong> Set a folder (default is "User generated") and default attributes.</li>
+       </ul>
+       <p>Drawing Options</p>
+       <p>
+          <strong>Drawing Options:</strong> You can create points, polygons, lines, and circles. When drawing you can also zoom to the drawn features, add an attribute name, and copy and move features.
+          Drawn features can be downloaded as WKT or GeoJSON. Drawn features will have centre point coordinates included.
+          Lines will include their length in kilometres and polygons and circles will include their areas in kilometres.
+       </p>
+       <p><strong>Selection:</strong> Select all features or select features with a bounding box.</p>
+       <p><strong>Edit:</strong> Selected features can be edited by performing operations on and between drawn layer features (difference, union, intersection, split).</p>
+       <br>
+
+       <h4><u>Feature Info</u></h4>
+       <p>
+          Feature Info allows you to see the information about a selected feature (e.g., coordinates and other information saved to the attribute table of the data).
+          The features on layers you have writing rights for you can also copy, move, download, and delete features.
+       </p>
+           <br>
+
+       <h4><u>Legend</u></h4>
+       <p>
+          In Legend you can see the symbols used for each layer loaded on the map. With Reset you can update the view if changes you’ve made are not yet visible in the legend.
+       </p>
+       <br>
+
+       <h4><u>Save</u></h4>
+       <p>
+          In Save you can save the current view as a workspace, which enables collaboration across users.
+          The workspace will be then available in Workspaces. You can also login and logout.
+       </p>
+       <p>
+          <strong>Name:</strong> Add the name of the workspace.<br>
+          <strong>Abstract:</strong> Write a description of the workspace.<br>
+          <strong>Keywords:</strong> You can add keywords.<br>
+          <strong>Thumbnail:</strong> Shows the thumbnail for the workspace to be created.<br>
+          <strong>Access:</strong> Define reading and writing access to everyone or by per user.<br>
+          <strong>Advanced options:</strong> Shows the extent of the workspace. You can edit the workspace extent or use the current map extent. You can also define which layers will be included into the workspace.<br>
+          <strong>Download:</strong> Download your workspace as a JSON-file.
+       </p>
+       <br>
+
+       <h4><u>Print</u></h4>
+       <p>Print allows you to print the current map view, with some styling options.</p>
+       <p>
+          <strong>Title:</strong> Add a title to the map, e.g., “Drone landing site analysis results.”<br>
+          <strong>Legend:</strong> Include a legend for the map layers. You can customize the background color, width, and text position.<br>
+          <strong>Imprint:</strong> Add author and abstract details to the map.<br>
+          <strong>Scale:</strong> Add a scale to the map as a scale line or scale bar. Choose the scale units (metric, degrees, US inch, or nautical mile).<br>
+          <strong>Print:</strong> Save the map view as a PDF. The map will also open in a new tab, where you can save it as an image.<br>
+          <strong>Preview:</strong> Preview the map view in a new tab.<br>
+          <strong>Download as PNG:</strong> Download the current map view, including added features such as scale and legend, as a PNG image.<br>
+       </p>
+       <br>
+
+       <h4><u>Login</u></h4>
+       <p>
+          You can login to the system using the Layman Portal. When asked about application permissions, authorize reading and writing permissions.
+       </p>
+    </div>
+    <!-- Analysis tab -->
+    <div *ngIf="selected.option === 'Analysis'" class="card-body analysis-body">
+       <h4><u>Analysis</u></h4>
+       <p>
+          The analysis tool allows you to configure and run spatial analysis on layers visible in the Layer Manager.
+          <u>Please notice, only vector layers (WMS) can be included into the analysis, other layer types are filtered.</u>
+       </p>
+       <p><strong>Result title:</strong> Choose a unique title for your analysis result. This will be the name of the created results layer.</p>
+       <p><strong>Study area:</strong> Shows the coordinates of the analysis study area. The analysis will be run on the current map view. Ensure the desired study area is displayed.</p>
+       <p><strong>Status:</strong></p>
+       <ul>
+          <li><strong>On:</strong> Include the layer in the analysis. Choose a weight between -1 and 1, where -1 represents very unsuitable areas (e.g., cemetery, daycare) and 1 represents very suitable areas (e.g., parking lot, bare ground).</li>
+          <li><strong>Off:</strong> Exclude the layer from the analysis.</li>
+          <li><strong>Difference:</strong> Use the layer as a mask to exclude certain areas from the analysis (e.g., waterbodies). This can also define restricted zones (e.g., no-fly zones).</li>
+       </ul>
+       <p><strong>Run Analysis:</strong> Starts the analysis. Once notified that the analysis is complete, the result will be visible in the Data Manager, where you can add it to the Layer Manager.</p>
+       <p><strong>Results panel:</strong> Displays metadata for each analysis ran. The metadata includes the parameters set to each layer in the analysis.</p>
+	   <p><strong>Troubleshooting:</strong></p>
+	   <ul>
+	      <li>Make sure you are logged in with correct user. Only analysis users are able to run the analysis.</li>
+		  <li>The analysis accepts only vector layers (WMS) from layman.</li>
+		  <li>The analysis user must have write permission for all input layers.</li>
+		  <li>Remember to give the analysis result unique name. The system is not able to overwrite files with same names.</li>
+		  <li>Test running the analysis at smaller scale. The server is not able to handle large analysis areas.</li>
+		  <li>Check layer manager for analysis result. The result layer is not loaded to the scene automatically.</li>
+		  <li>In some cases, the analysis throws an error even if the analysis was successful. Check layer manager just in case for the layer.</li>
+	   </ul>
+    </div>
+  </ng-container>
+</div>
