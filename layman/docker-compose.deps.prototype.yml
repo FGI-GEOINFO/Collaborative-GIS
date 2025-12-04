@@ -1,0 +1,91 @@
+volumes:
+   redis-data:
+
+services:
+   postgresql:
+      image: layermanager/postgis:13.3-3.1-20210608
+      volumes:
+        - ./deps/postgresql/data:/var/lib/postgresql/data
+      environment:
+         - POSTGRES_USER=docker
+         - POSTGRES_PASSWORD=docker
+         - POSTGRES_DB=gis
+      restart: on-failure
+
+   qgis:
+      build:
+        context: deps/qgis/docker
+        dockerfile: Dockerfile
+      extra_hosts:
+         - "host.docker.internal:host-gateway"
+      volumes:
+        - ./deps/qgis/data:/qgis/data:ro
+      restart: on-failure
+      environment:
+        - LANG=en_EN.UTF-8
+        - QGIS_SERVER_LOG_LEVEL=0
+        - DEBUG=1                  # display env before spawning QGIS Server
+      depends_on:
+        - postgresql
+
+   geoserver:
+      image: docker.osgeo.org/geoserver:2.21.2
+      extra_hosts:
+         - "host.docker.internal:host-gateway"
+      volumes:
+        - ./deps/geoserver/data:/opt/geoserver_data/
+      restart: on-failure
+      environment:
+        - GS_VERSION=2.21.2
+        - SKIP_DEMO_DATA=true
+        - GEOSERVER_CSRF_WHITELIST=${LAYMAN_PROXY_SERVER_NAME}
+      depends_on:
+        - qgis
+        - postgresql
+
+   redis:
+      image: redis:4.0.11-alpine
+      volumes:
+        - redis-data:/data
+
+   wagtail:
+      build:
+        context: deps/wagtail
+        dockerfile: docker/Dockerfile
+      ports:
+        - 8083:8000
+      command: /app/start_wagtail.sh
+      volumes:
+        - ./deps/wagtail/data:/app/data/
+        - ./deps/wagtail/sample:/app/initial_data/
+
+   micka:
+      container_name: micka
+      build:
+        context: deps/micka/docker
+        dockerfile: Dockerfile
+      command: bash -c "envsubst '$$MICKA_HOSTPORT' < /var/www/html/Micka/php/app/config/config.local.neon.demo-template > /var/www/html/Micka/php/app/config/config.local.neon && envsubst '$$MICKA_HOSTPORT' < /etc/nginx/sites-available/default.demo-template > /etc/nginx/sites-available/default && cd /code/src && python3 wait_for_deps.py && /etc/init.d/php7.3-fpm start && nginx -g 'daemon off;'"
+      environment:
+        - MICKA_HOSTPORT=${MICKA_HOSTPORT}
+      env_file:
+        - deps/micka/docker/.env
+      volumes:
+        - ./deps/micka/docker/code/src:/code/src
+        - ./deps/micka/sample/confs/bootstrap.php:/var/www/html/Micka/php/app/bootstrap.php
+        - ./deps/micka/sample/confs/config.local.neon.demo-template:/var/www/html/Micka/php/app/config/config.local.neon.demo-template
+        - ./deps/micka/sample/confs/default.demo-template:/etc/nginx/sites-available/default.demo-template
+      depends_on:
+        - postgresql
+
+   hslayers_server:
+      container_name: hslayers_server
+      build:
+        context: ../hslayers/hslayers-server/docker
+        dockerfile: Dockerfile
+      volumes:
+        - ../hslayers/hslayers-server/.env:/hslayers_server/.env
+      restart: on-failure
+      ports:
+        - 8085:8085
+        - 8086:8086
+        - 8087:8087

@@ -1,0 +1,221 @@
+geo $is_internal {
+     default 0;
+     127.0.0.1 1;
+     172.18.0.0/24 1;
+}
+
+server {
+     listen 80;
+     server_name <DomainName>;
+
+     if ($is_internal = 0) {
+         return 301 https://$host@request_uri;
+     }
+
+     location /qgis {
+        allow  127.0.0.1;
+        # docker containers 172.18.0.x, 172.19.0.x, 172.20.0.x, 172.21.0.x
+        allow  172.18.0.0/24;
+        allow  172.19.0.0/24;
+        allow  172.20.0.0/24;
+        allow  172.21.0.0/24;
+        deny   all;
+        proxy_buffers 16 16k;
+        proxy_buffer_size 16k;
+        gzip off;
+        fastcgi_pass layman-qgis-1:5555;
+        fastcgi_param SERVER_NAME nginx;
+        fastcgi_param SERVER_PORT 80;
+        include fastcgi_params;
+     }
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
+    server_name <DomainName>;
+
+    ssl_certificate /etc/nginx/ssl/live/<DomainName>/fullchain.pem;
+    ssl_certificate_key /etc/nginx/ssl/live/<DomainName>/privkey.pem;
+
+    # ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+    # ssl_ciphers HIGH:!aNULL:!MD5;
+
+    client_max_body_size 200m;
+
+	# Prevents common scanners and inspection tools
+    if ($http_user_agent ~* (zgrab|CensysInspect|Keydrop\.io|onlyscans\.com|nvdorz)) {
+        return 403;
+    }
+
+    # This is needed for the proxy to work. Otherwise nginx will delete one of the slashes in URI.
+    merge_slashes off;
+
+    # These are needed for the embedded login to work in CGIS GUI
+    add_header X-Frame-Options "ALLOWALL";
+    add_header Content-Security-Policy "frame-ancestors 'self' https://<DomainName>";
+
+
+    root /usr/share/nginx/html/helsinki;
+
+    location / {
+        # add_header X-Frame-Options "ALLOWALL";
+        # alias /usr/share/nginx/html;
+        # index index.html index.htm
+        try_files $uri $uri/ /index.html =404;
+    }
+
+    location ~* ^/(geoserver(/[a-z0-9_]+)?/(wfs|wms|ows)) {
+        allow 127.0.0.1;
+        allow 172.18.0.0/24;
+        #allow 147.161.187.33;
+        deny all;
+        # https://stackoverflow.com/a/52319161
+        resolver 127.0.0.11;
+        set $layman_hostport_tmp "layman:8000";
+        proxy_pass http://$layman_hostport_tmp/$1$is_args$args;
+        proxy_set_header Host $host;
+        proxy_set_header ${LAYMAN_AUTHN_HTTP_HEADER_NAME} "";
+    }
+
+    #location /geoserver/ {
+    #    #allow 127.0.0.1;
+    #    #allow 172.18.0.0/24;
+    #    # allow 147.161.187.33;
+    #    deny all;
+    #    proxy_pass http://geoserver:8080/geoserver/;
+    #    proxy_set_header Host $host;
+    #}
+
+    location /rest/ {
+        # https://stackoverflow.com/a/52319161
+        resolver 127.0.0.11;
+        set $layman_hostport_tmp "layman:8000";
+        proxy_pass http://$layman_hostport_tmp$uri$is_args$args;
+        proxy_set_header Host $host;
+        proxy_set_header ${LAYMAN_AUTHN_HTTP_HEADER_NAME} "";
+    }
+
+    location /flower/ {
+        # https://stackoverflow.com/a/52319161
+        resolver 127.0.0.11;
+        set $flower_hostport_tmp "flower:5555";
+        proxy_pass http://$flower_hostport_tmp$uri$is_args$args;
+        proxy_set_header Host $host;
+    }
+
+    location ~ ^/micka/(layout|scripts|thesaurus)/ {
+        # https://stackoverflow.com/a/52319161
+        resolver 127.0.0.11;
+        set $micka_hostport_tmp "micka:80";
+        rewrite ^/micka/(.*)$ /$1 break;
+        proxy_pass http://$micka_hostport_tmp;
+        proxy_set_header Host $host;
+    }
+
+    location /micka/ {
+        # https://stackoverflow.com/a/52319161
+        resolver 127.0.0.11;
+        set $micka_hostport_tmp "micka:80";
+        proxy_pass http://$micka_hostport_tmp;
+        proxy_set_header Host $host;
+    }
+
+    location /qgis {
+        allow  127.0.0.1;
+        ## docker containers 172.18.0.x, 172.19.0.x, 172.20.0.x, 172.21.0.x
+        allow  172.18.0.0/24;
+        allow  172.19.0.0/24;
+        allow  172.20.0.0/24;
+        allow  172.21.0.0/24;
+        deny   all;
+        proxy_buffers 16 16k;
+        proxy_buffer_size 16k;
+        gzip off;
+        fastcgi_pass layman-qgis-1:5555;
+        fastcgi_param SERVER_NAME nginx;
+        fastcgi_param SERVER_PORT 80;
+        include fastcgi_params;
+    }
+
+    location /proxy/  {
+        proxy_pass http://hslayers_server:8085/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /layman/ {
+        proxy_pass http://hslayers_server:8087/;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-CSRFToken $cookie_CSRF_TOKEN_NAME;
+    }
+
+    location /client {
+        proxy_pass http://layman_client:3000;
+        proxy_set_header Host $host;
+        # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        # proxy_set_header X-Real-IP $remote_addr;
+        # proxy_set_header Host $http_host;
+        # proxy_set_header X-Forwarded-Proto $scheme;
+        # proxy_set_header X-CSRFToken $cookie_CSRF_TOKEN_NAME;
+    }
+
+    location /admin {
+        # resolver 127.0.0.11;
+        proxy_pass http://layman-wagtail-1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-CSRFToken $cookie_CSRF_TOKEN_NAME;
+        proxy_set_header Referer $http_referer;
+        # add_header Access-Control-Allow-Origin "*";
+    }
+
+    location /static {
+        proxy_pass http://layman-wagtail-1:8000;
+    }
+
+    location /o/authorize {
+        proxy_pass http://host.docker.internal:8083/o/authorize;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-CSRFToken $cookie_CSRF_TOKEN_NAME;
+    }
+
+    location /o/token {
+        proxy_pass http://wagtail:8000/o/token;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-CSRFToken $cookie_CSRF_TOKEN_NAME;
+    }
+
+    location /django-admin {
+        allow  127.0.0.1;
+        allow  172.18.0.0/24;
+        allow 147.161.187.33;
+        deny all;
+        proxy_pass http://host.docker.internal:8083/django-admin;
+        # proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        # proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-CSRFToken $cookie_CSRF_TOKEN_NAME;
+    }
+
+    location /lls_analysis/ {
+        proxy_pass http://host.docker.internal:8001/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-CSRFToken $cookie_CSRF_TOKEN_NAME;
+    }
+
+}

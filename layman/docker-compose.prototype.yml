@@ -1,0 +1,136 @@
+services:
+   layman:
+      container_name: layman
+      build:
+        context: .
+        dockerfile: docker/Dockerfile.production
+        args:
+           - UID_GID
+      image: layman:latest
+      user: ${UID_GID}
+      command: bash -c "python3 src/layman_flush_redis.py && python3 src/wait_for_deps.py && cd src && gunicorn --timeout 300 -w 2 -b 0.0.0.0:8000 layman:app"
+      env_file:
+         - .env
+      extra_hosts:
+         - "host.docker.internal:host-gateway"
+         - ${EXTRA_HOST1}
+         - ${EXTRA_HOST2}
+      volumes:
+        - ./layman_data:/layman_data
+        - ./src/layman_settings.py:/code/src/layman_settings.py
+        - ./version.txt:/code/version.txt
+        - ./deps/geoserver/data:/geoserver/data_dir
+        - ./deps/geoserver/sample/geoserver_data:/geoserver/initial_data_dir
+        - ./deps/qgis/data:/qgis/data
+      depends_on:
+        - timgen
+        - layman_client
+        - redis
+        - postgresql
+        - qgis
+        - geoserver
+
+   celery_worker:
+      image: layman:latest
+      user: ${UID_GID}
+      command: bash -c "cd src && python3 wait_for_deps.py && python3 -m celery -A layman.celery_app worker -Q $${LAYMAN_CELERY_QUEUE} --loglevel=info"
+      env_file: .env
+      environment:
+        - C_FORCE_ROOT=true
+        - LAYMAN_SKIP_REDIS_LOADING=true
+      extra_hosts:
+         - "host.docker.internal:host-gateway"
+         - ${EXTRA_HOST1}
+         - ${EXTRA_HOST2}
+      volumes:
+        - ./layman_data:/layman_data
+        - ./src/layman_settings.py:/code/src/layman_settings.py
+        - ./deps/qgis/data:/qgis/data
+        - ./deps/geoserver/data:/geoserver/data_dir
+      depends_on:
+        - layman
+
+   flower:
+      container_name: flower
+      image: layman:latest
+      user: ${UID_GID}
+      command: bash -c "cd src && python3 wait_for_deps.py && celery -A layman.celery_app flower --port=5555 --url_prefix=flower"
+      env_file: .env
+      environment:
+        - LAYMAN_SKIP_REDIS_LOADING=true
+      extra_hosts:
+         - ${EXTRA_HOST1}
+         - ${EXTRA_HOST2}
+      volumes:
+        - ./layman_data:/layman_data
+        - ./src/layman_settings.py:/code/src/layman_settings.py
+        - ./deps/qgis/data:/qgis/data
+      depends_on:
+        - celery_worker
+
+   timgen:
+      container_name: timgen
+      build:
+        context: timgen
+        dockerfile: Dockerfile.production
+      image: timgen:latest
+      user: ${UID_GID}
+      command: node server.js
+      extra_hosts:
+         - ${EXTRA_HOST1}
+         - ${EXTRA_HOST2}
+
+   layman_client:
+      container_name: layman_client
+      build:
+        context: client
+        dockerfile: docker/Dockerfile.production
+        args:
+           - LAYMAN_CLIENT_VERSION=${LAYMAN_CLIENT_VERSION}
+           - LTC_BASEPATH=${LTC_BASEPATH}
+      image: layman_client:latest
+      command: sh -c "npm start"
+      restart: on-failure
+      env_file:
+         - .env
+      extra_hosts:
+         - ${EXTRA_HOST1}
+         - ${EXTRA_HOST2}
+      depends_on:
+        - redis
+
+   nginx:
+      image: nginx:1.16-alpine
+      command: sh -c "envsubst '$$LAYMAN_AUTHN_HTTP_HEADER_NAME' < /etc/nginx/conf.d/nginx-cgis > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+      environment:
+        - LAYMAN_AUTHN_HTTP_HEADER_NAME=${LAYMAN_AUTHN_HTTP_HEADER_NAME}
+      volumes:
+        - ./deps/nginx/sample/nginx-template:/etc/nginx/conf.d/nginx-cgis
+        - /srv/hslayers/cgis/dist/helsinki:/usr/share/nginx/html/helsinki
+        - /etc/letsencrypt:/etc/nginx/ssl/
+      ports:
+        - 80:80
+        - 443:443
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      depends_on:
+        - layman
+        - layman_client
+        - flower
+        - geoserver
+
+   lls_analysis:
+      build:
+        context: ../plugins/lls_analysis
+        dockerfile: Dockerfile
+      container_name: lls_analysis
+      ports:
+        - "8001:8001"
+      volumes:
+        - ../plugins/lls_analysis/src:/app/src # Mount local directory to container and sync changes (hot reload)
+        - ../plugins/lls_analysis/data:/app/data # Mount local directory to container and sync changes (hot reload)
+        - ../plugins/lls_analysis/main.py:/app/main.py # Mount local main.py to container and sync canges (hot reload) NEWEST ADDITION
+      env_file:
+        - .env # Specify the path to the .env file
+      environment:
+        - PYTHONUNBUFFERED=1
