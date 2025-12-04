@@ -1,0 +1,29 @@
+{
+    "study_area": [
+        25.033724358847675,
+        60.167698539128395,
+        25.043552524781536,
+        60.17144854207265
+    ],
+    "study_area_epsg": "4326",
+    "resolution": 10,
+    "workspace": "gdansk_analysis13",
+    "result_title": "analysis_test5678",
+    "layman_friendly_result_title": "analysis_test5678",
+    "analyzable_layers": [
+        {
+            "title": "Bare ground WD",
+            "layman_friendly_layer_name": "bare_ground_wd",
+            "workspace": "analysis_wms",
+            "weight": 0.74
+        },
+        {
+            "title": "Buildings WD",
+            "layman_friendly_layer_name": "buildings_wd",
+            "workspace": "analysis_wms",
+            "weight": -0.86
+        }
+    ],
+    "restricted_layers": [],
+    "run_time": "9.10.2025 klo 9.05.45"
+}

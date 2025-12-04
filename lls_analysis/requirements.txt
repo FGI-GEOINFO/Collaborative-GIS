@@ -1,0 +1,11 @@
+colorama==0.4.6
+prompt-toolkit==3.0.32
+setuptools==69.5.1
+wcwidth==0.2.5
+#wheel==0.43.0
+django
+djangorestframework
+django-cors-headers
+django-filter
+djangorestframework-gis
+geopandas==1.0.1

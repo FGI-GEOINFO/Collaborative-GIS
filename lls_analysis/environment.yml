@@ -1,0 +1,23 @@
+name: cgis-script
+channels:
+- conda-forge
+- defaults
+dependencies:
+- shapely=2.0.2
+- geopandas
+- owslib
+- contextily
+- python
+- pip
+- gdal
+- colorama
+- django
+- rasterio
+- django-cors-headers
+- django-filter
+- djangorestframework
+- djangorestframework-gis
+- owslib
+- python-dotenv
+- requests-oauthlib
+- oauthlib
