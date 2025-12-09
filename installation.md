@@ -1,5 +1,5 @@
 # Installation guide
-## Notification
+> [!IMPORTANT]
 HSLayers and Layman have updated after the installation of CGIS. It is highly recommended to use newest version of both applications for security reasons. Especially geoserver should be updated since this version has couple critical vulnerabilities. CGIS deals with it by having geoserver private and not available for public. HSLayers had changes that affected coding syntax. In short, the existing CGIS HSLayers codes most likely won’t work in newer versions. The scripts have to be modified.
 
 ## Server information
@@ -11,7 +11,7 @@ The virtual environments in cPouta have permanent DNS names that can be used as 
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
 | standard.xxlarge  | 8 | 31.2 | 80 | 0 | 80 | 3.8 | 8 |
 
-Table 1: CITYAM CGIS resource allocation
+_Table 1: CITYAM CGIS resource allocation_
 
 ## CGIS server components
 CGIS is a system that is structured of different types of applications running inside docker containers. The applications can be divided into four major parts, which are HSLayers, HSLayers-server, layer manager (Layman) and drone landing site analysis plugin.
@@ -34,7 +34,7 @@ sudo apt install ca-certificates curl gnupg build-essential git snapd
 ## NVM and node
 NVM is a node version manager, which can install and change different versions of node. Node is open-source JavaScript environment which makes it possible to create different applications, scripts, tools, etc.
 
-Note! This guide installs the applications to the current user’s home directory, which is why the commands will not work with other users. This can be avoided by setting the path of node for selected user (6.1). Alternatively, install NVM and node globally.
+This guide installs the applications to the current user’s home directory, which is why the commands will not work with other users. This can be avoided by setting the path of node for selected user (6.1). Alternatively, install NVM and node globally.
 
 Download NVM installation script and install it using bash. Replace <version_number> with actual version of NVM.
     
@@ -187,7 +187,7 @@ sudo snap install --classic certbot
 ```
 
 Create certificate
-Note! Webroot path has to point to a folder where the web application resides. Otherwise, the command will produce an error.
+Webroot path has to point to a folder where the web application resides. Otherwise, the command will produce an error.
 ```bash
 sudo certbot certonly --webroot --webroot-path </path/to/web/application> -d <mydomain.com>
 ```
@@ -206,12 +206,11 @@ The created certificate folder has to be connected to the web application via a 
 
 In CGIS the certificate had to be updated manually since we keep the HTTP port normally closed for security reasons. To update certificate in CGIS one needs to be open HTTP (80) port, comment HTTP block and uncomment listen 80 lines in HTTPS block in Nginx configuration file.
 
-Note!
-It is recommended to find a better way to update the certificate. Currently it needs quite a lot of manual work. Nginx configuration should be changed so that it would always work when updating the certificate. There is also the problem that Docker doesn’t recognize when the certificate has been updates. It seems that the updated certificate isn’t copied inside the Nginx docker container for some reason. The Nginx docker container has to be restarted for the update to take effect. The problem might be related to folder permissions.
+> [!NOTE]
+Currently updating the certificate needs quite a lot of manual work. Temporarily opening HTTP port, modifying Nginx configuration file, updating certificate manually and restarting Nginx docker container multiple times. There is also the problem that after updating the certificate, it doesnt get updated to the Nginx docker container automatically. It might be related to permissions. It is recommended to develop an automatic or semi-automatic system to make it easier to update the sertificate.
 
 ## Layman (LayerManager)
 Layman is a publishing server for geospatial data via a REST API. The server creates OGC WMS and WFS APIs from the published data. The server accepts vector and raster data and also layer styling formats. There is also an authentication service, which makes it possible to create users and handle data permissions. Layman server is built on top of many different components like Docker, Python, Flask, PostgreSQL, PostGIS, GDAL, QGIS Server, GeoServer, OpenLayers, Celery, Redis, etc. In table 2 can be seen all layman related components that are running inside docker containers in CGIS server.
-
 
 | Application name  | Version |
 | ------------- | ------------- |
@@ -229,7 +228,7 @@ Layman is a publishing server for geospatial data via a REST API. The server cre
 | Redis | 4.0.11-alpine |
 | Flower | - |
 
-Table 2: Major components of layman and their version number in CGIS. Applications that have line as version number means that no information about version number was found. Layman version is 1.23.0.
+_Table 2: Major components of layman and their version number in CGIS. Applications that have line as version number means that no information about version number was found. Layman version is 1.23.0._
 
 Link to the layman github repository. It is also recommended to repository’s information and guide related to Layman.
 https://github.com/LayerManager/layman
@@ -253,7 +252,6 @@ git checkout $(git describe --abbrev=0 --tags)
 
 Before Layman can be built the service has to be configured. There are multiple files that have to be modified for the system to work. The filepaths for files that were modified in this project can be seen in XXXX.
 
-
 | Layman file | Description |
 | ------------- | ------------- |
 | /layman/makefile | Commands for docker-compose |
@@ -274,7 +272,8 @@ Note! The tokens should be removed from the analysis script and do the authentic
 
 NGINX web server configuration file is for redirecting web traffic and security settings. HTTPS certificate folder’s path inside the docker container was added to the configuration file, which makes using https addresses possible. Most components of backend and frontend were added as location blocks. This makes it possible to access the applications using a URL. (Example: REST API, map interface, etc). There are also security related settings that were needed for embedded login and authentication to work.
 
-Note! If using this guides version of Geoserver, it should not be available publicly. In this version there are two security vulnerabilities. It is highly recommended to get a newer version of the Geoserver.
+> [!WARNING]
+If using this guides version of Geoserver, it should not be available publicly. In this version there are two security vulnerabilities. It is highly recommended to get a newer version of the Geoserver.
 
 ## HSLayers-server
 HSLayers-server is a server component for the HSLayers map application. The server consists of three services, which are proxy, share and layman authentication service. Proxy is used to access services on other domains and work with CORS headers. Share is used to store and share maps via permalinks. Layman authentication client is needed to authenticate to layman from the map application.
@@ -314,7 +313,7 @@ ng build production
 
 Building Angular application creates a new application folder. Building application also generates a cache that stores information related to the build, which makes following builds faster. Generation of cache can be toggled on or off. The built application folder was copied inside Nginx docker container, so that the web server could find and access the application. The copying was done utilizing docker volume bind.
 
-Note! Every time build is done it generates a cache in the working directory. The caches are not automatically removed at least in this project. When developing check how much disk space the caches take periodically. Remember to remove old caches when they take too much disk space.
+Every time build is done it generates a cache in the working directory. The caches are not automatically removed at least in this project. When developing check how much disk space the caches take periodically. Remember to remove old caches when they take too much disk space.
 
 Install newest HsLayers package
 ```bash
@@ -346,11 +345,11 @@ Note! Getting necessary access tokens from the server should be improved in the 
 ## Creating user accounts
 In CGIS two types of accounts can be created, which are normal and analysis users. Normal users can view, create workspaces and data but cannot use the analysis tool. Analysis user can do the same things as normal user and in addition use the analysis tool.
 
-Note!
-Each analysis user needs an access token for the analysis to work. Currently this can only be done by manually adding the access token to the analysis script. It is recommended to get the authentication to work properly in the analysis scripts.
-
-Normal users:
+Normal users:</br>
 New users are created from wagtail website. An user (eg. layman) who has administrative permissions should be used to create new users. To create a user, in wagtail go to settings, users and then use add user command. In account tab add necessary information like account name, email, password, etc. In roles tab, the new users are added to moderators and editors groups. These groups affect what the users can do in CGIS.
 
-Analysis users:
+Analysis users:</br>
 Create the user in similar fashion as when creating a normal user. In django log in with an administrative account (eg. layman). Navigate to access tokens tab and add a new access token. In the token settings, find the created analysis user, create a custom token, set layman-test-client as application, set the expiration date of the token and in scope add read write text. The created token's custom token value has to be added to the analysis plugin. Navigate to the analysis folder and search for views.py script. In the script search for code lines that contain data["workspace"] and auth_token. The workspace values should be the name of the analysis account and auth_token value the custom token value that was added in django. Test the created analysis user to confirm that everything works as expected.
+
+> [!NOTE]
+Each analysis user needs an access token for the analysis to work. Currently this can only be done by manually adding the access token to the analysis script. It is recommended to get the authentication to work properly in the analysis scripts.
