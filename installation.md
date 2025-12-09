@@ -344,3 +344,13 @@ Note! Getting necessary access tokens from the server should be improved in the 
 
 
 ## Creating user accounts
+In CGIS two types of accounts can be created, which are normal and analysis users. Normal users can view, create workspaces and data but cannot use the analysis tool. Analysis user can do the same things as normal user and in addition use the analysis tool.
+
+Note!
+Each analysis user needs an access token for the analysis to work. Currently this can only be done by manually adding the access token to the analysis script. It is recommended to get the authentication to work properly in the analysis scripts.
+
+Normal users:
+New users are created from wagtail website. An user (eg. layman) who has administrative permissions should be used to create new users. To create a user, in wagtail go to settings, users and then use add user command. In account tab add necessary information like account name, email, password, etc. In roles tab, the new users are added to moderators and editors groups. These groups affect what the users can do in CGIS.
+
+Analysis users:
+Create the user in similar fashion as when creating a normal user. In django log in with an administrative account (eg. layman). Navigate to access tokens tab and add a new access token. In the token settings, find the created analysis user, create a custom token, set layman-test-client as application, set the expiration date of the token and in scope add read write text. The created token's custom token value has to be added to the analysis plugin. Navigate to the analysis folder and search for views.py script. In the script search for code lines that contain data["workspace"] and auth_token. The workspace values should be the name of the analysis account and auth_token value the custom token value that was added in django. Test the created analysis user to confirm that everything works as expected.
