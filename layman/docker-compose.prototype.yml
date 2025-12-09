@@ -106,7 +106,7 @@ services:
         - LAYMAN_AUTHN_HTTP_HEADER_NAME=${LAYMAN_AUTHN_HTTP_HEADER_NAME}
       volumes:
         - ./deps/nginx/sample/nginx-template:/etc/nginx/conf.d/nginx-cgis
-        - /srv/hslayers/cgis/dist/helsinki:/usr/share/nginx/html/helsinki
+        - /srv/hslayers/cgis/dist/development:/usr/share/nginx/html/development
         - /etc/letsencrypt:/etc/nginx/ssl/
       ports:
         - 80:80
