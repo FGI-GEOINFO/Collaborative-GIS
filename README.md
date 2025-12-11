@@ -1,4 +1,4 @@
-# Collaborative-GIS
+# Collaborative GIS (CGIS)
 Collaborative GIS (CGIS) is webmap platform intended for collaborative planning. As a Spatial Decision Support System (SDSS) that enables collaborative planning, in CGIS participants can work together on a shared map workspace each on their own devices. The key features of CGIS are:
 
 * a map user interface (e.g. offering a shared perspective to the planning situation)
