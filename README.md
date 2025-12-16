@@ -30,7 +30,7 @@ The concept of Collaborative GIS is based on the work done with Baltic Explorer 
 
 **Acknowledgements**
 
-INTERREG EU?
+![Interreg Baltic Sea Region 2021-2027 is a source of EU funding.](https://github.com/FGI-GEOINFO/Collaborative-GIS/blob/main/CITYAM_Logo_Standard-small.png)
 
 We made use of the Collaborative GIS platform provided by the Open Geospatial Information Infrastructure for Research (Geoportti, urn:nbn:fi:research-infras-2016072513) funded by the Research Council of Finland, CSC – IT Center for Science, and other Geoportti consortium members.
 
