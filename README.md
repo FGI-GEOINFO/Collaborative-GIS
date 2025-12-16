@@ -16,19 +16,29 @@ Collaborative GIS (CGIS) is webmap platform intended for collaborative planning.
 For example, the CGIS platform can be used by multiple people working together to discuss, plan, and decide the locations of drone in a box sites, where drones are recharged and stored.
 
 
-**Introduction video**
-
 **Dependencies**
 
-HSLayers
+HSLayers and HSLayers Server: GitHub URL
 
-Layman
+Layman: GitHub URL
 
 **Previous collaborative GIS**
 
-Baltic Explorer
+The concept of Collaborative GIS is based on the work done with Baltic Explorer. For more information visit http://balticexplorer.eu.
 
 
 **Acknowledgements**
 
-CSC
+INTERREG EU?
+
+We made use of the Collaborative GIS platform provided by the Open Geospatial Information Infrastructure for Research (Geoportti, urn:nbn:fi:research-infras-2016072513) funded by the Research Council of Finland, CSC – IT Center for Science, and other Geoportti consortium members.
+
+**References**
+
+Rönneberg, M., Jussila, A., & Kettunen, P. (2024). Eliciting user needs of a collaborative GIS for planning urban drone landing sites. Abstracts of the ICA, 8, 20. https://ica-abs.copernicus.org/articles/8/20/2024/ica-abs-8-20-2024.pdf
+
+Mladenović, Miloš; Saif, Atiullah; Honkavaara, Eija; Kettunen, Pyry et al. 2025.
+A Collaborative GIS for Planning of Urban Drone Launch and Landing Site Locations. International Society for Photogrammetry and Remote Sensing. International archives of the photogrammetry, remote sensing and spatial information sciences, 48(2/W11-2025).
+https://doi.org/10.5194/isprs-archives-XLVIII-2-W11-2025-227-2025
+
+Honkavaara, Eija; Kettunen, Pyry; Rönneberg, Mikko; Jussila, Anssi et al. 2025. Consolidated geospatial tool for landing site planning and prioritisation. CITYAM Project. https://interreg-baltic.eu/wp-content/uploads/2025/01/CITYAM-O2.1-Consolidated-geospatial-tool-for-landing-site-planning-and-prioritisation.pdf
