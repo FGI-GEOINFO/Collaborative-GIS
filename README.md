@@ -19,13 +19,13 @@ For example, the CGIS platform can be used by multiple people working together t
 
 **Dependencies**
 
-HSLayers and HSLayers Server: GitHub URL
+HSLayers and HSLayers Server: https://github.com/hslayers/hslayers-ng
 
-Layman: GitHub URL
+Layman: https://github.com/LayerManager
 
 **Previous collaborative GIS**
 
-The concept of Collaborative GIS is based on the work done with Baltic Explorer. For more information visit http://balticexplorer.eu.
+The concept of Collaborative GIS is based on the work done with Baltic Explorer ([BONUS BASMATI, EU](https://bonusbasmati.eu/)). For more information visit http://balticexplorer.eu.
 
 
 **Acknowledgements**
