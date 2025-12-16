@@ -43,3 +43,18 @@ A Collaborative GIS for Planning of Urban Drone Launch and Landing Site Location
 https://doi.org/10.5194/isprs-archives-XLVIII-2-W11-2025-227-2025
 
 Honkavaara, Eija; Kettunen, Pyry; Rönneberg, Mikko; Jussila, Anssi et al. 2025. Consolidated geospatial tool for landing site planning and prioritisation. CITYAM Project. https://interreg-baltic.eu/wp-content/uploads/2025/01/CITYAM-O2.1-Consolidated-geospatial-tool-for-landing-site-planning-and-prioritisation.pdf
+
+
+**Authoship**
+Anssi Jussila^1, Mikko Rönneberg^2, Leo Niemi^3, Pyry Kettunen^4, Eija Honkavaara^5
+
+1,2,3,4,5 Finnish Geospatial Research Institute in the National Land Survey of Finland
+
+Development of the Collaboratibe GIS was made in the INTERREG CITYAM EU project.
+
+The authors contributed to the development as follows:
+
+1,2,3 Programming
+2,4 Managing the project and the development team
+1,2,4 Defining requirements, Designing, Usability, Use and user testing
+4,5 Supervising development
