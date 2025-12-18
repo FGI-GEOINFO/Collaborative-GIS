@@ -19,9 +19,11 @@ For example, the CGIS platform can be used by multiple people working together t
 
 **Dependencies**
 
-HSLayers and HSLayers Server: https://github.com/hslayers/hslayers-ng
+CGIS is built upon the great work done with the repositories Layman and HSLayers. 
 
 Layman: https://github.com/LayerManager
+
+HSLayers and HSLayers Server: https://github.com/hslayers/hslayers-ng
 
 **Previous collaborative GIS**
 
