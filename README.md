@@ -1,33 +1,36 @@
 # FGI Web Collaborative GIS (CGIS) for CITYAM
+
 ![Collaborative GIS user interface](https://github.com/FGI-GEOINFO/Collaborative-GIS/blob/main/cgis.png)
-FGI Web Collaborative GIS (CGIS) is a web map platform intended for collaborative planning. The CGIS is a redevelopment based on the research demonstrator Baltic Explorer  As a Spatial Decision Support System (SDSS) that enables collaborative planning, in CGIS participants can work together on a shared map workspace each on their own devices. The key features of CGIS are:
 
-* a map user interface (e.g. offering a shared perspective to the planning situation)
+FGI Web Collaborative GIS (CGIS) is a web map platform intended for collaborative planning in groupwork. The development case for the CGIS was planning drone landing sites according to purposes of the CITYAM project.
 
-* a workspace manager (e.g. managing different projects)
+CGIS is a Spatial Decision Support System (SDSS) in which participants of collaborative planning tasks can work together in shared map workspaces, on their personal or/and shared devices. The key features of CGIS are:
 
-* a data manager (e.g. importing data or connecting to external APIs)
+* map user interface (e.g., offering a shared perspective to the planning situation)
 
-* a layer manager (e.g. overlaying data)
+* workspace manager (e.g., managing different projects)
 
-* map drawing tools (e.g. sketching planning ideas)
+* data manager (e.g., importing data or connecting to external APIs)
 
-* an analysis tool (e.g. running on-the-fly analysis on imported data).
+* layer manager (e.g., overlaying data)
 
-The CGIS platform can be used by multiple people working together, for example, to discuss, plan, and decide the locations of drone in a box sites, where drones are recharged and stored.
+* map drawing tools (e.g., sketching planning ideas)
 
+* analysis tool (e.g., running on-the-fly analysis on imported data).
+
+The CGIS platform can be used by multiple people working together, for example, to discuss, plan, and decide the locations of drone-in-a-box sites, where drones launch and land as well as are recharged and stored.
 
 ## Dependencies
 
-CGIS is built upon the great work done with the repositories Layman and HSLayers. 
+CGIS is primarily built upon the following repositories:
 
-Layman: https://github.com/LayerManager
+ * Layman: https://github.com/LayerManager
 
-HSLayers and HSLayers Server: https://github.com/hslayers/hslayers-ng
+ * HSLayers and HSLayers Server: https://github.com/hslayers/hslayers-ng
 
 **Previous collaborative GIS**
 
-The concept of Collaborative GIS is based on the work done with Baltic Explorer ([BONUS BASMATI, EU](https://bonusbasmati.eu/)). For more information visit http://balticexplorer.eu.
+The FGI Web Collaborative GIS is based on the research and development of Baltic Explorer (http://balticexplorer.eu; https://github.com/FGI-GEOINFO/Baltic-Explorer) in the BONUS BASMATI project (https://bonusbasmati.eu/).
 
 
 ## Acknowledgements
@@ -36,7 +39,7 @@ CGIS was created in the [CITYAM project](https://interreg-baltic.eu/project/city
 
 ![Interreg Baltic Sea Region 2021-2027 is a source of EU funding.](https://github.com/FGI-GEOINFO/Collaborative-GIS/blob/main/CITYAM_Logo_Standard-small.png)
 
-We made use of the Collaborative GIS platform provided by the Open Geospatial Information Infrastructure for Research (Geoportti, urn:nbn:fi:research-infras-2016072513) funded by the Research Council of Finland, CSC – IT Center for Science, and other Geoportti consortium members.
+We used computing services by CSC – IT Center for Science through the Open Geospatial Information Infrastructure for Research (Geoportti, urn:nbn:fi:research-infras-2016072513) funded by the Research Council of Finland.
 
 ## References
 
@@ -51,18 +54,20 @@ Honkavaara, Eija; Kettunen, Pyry; Rönneberg, Mikko; Jussila, Anssi et al. 2025.
 
 ## Authoship
 
-Anssi Jussila<sup>1</sup>, Mikko Rönneberg<sup>2</sup>, John Hadaway<sup>3</sup>, Leo Niemi<sup>4</sup>, Pyry Kettunen<sup>5</sup>, Eija Honkavaara<sup>6</sup>
+Anssi Jussila<sup>1</sup>, John Hadaway<sup>2</sup>, Leo Niemi<sup>3</sup>, Mikko Rönneberg<sup>4</sup>, Pyry Kettunen<sup>5</sup>, Atiullah Saif<sup>6</sup>, Milos Mladenović<sup>7</sup>, Eija Honkavaara<sup>8</sup>
 
-<sup>1,2,3,4,5</sup> Finnish Geospatial Research Institute in the National Land Survey of Finland
+<sup>1,2,3,4,5,6</sup> Finnish Geospatial Research Institute in the National Land Survey of Finland
 
 Development of the Collaboratibe GIS was made in the CITYAM project with the support of EU funds from the [Interreg Baltic Sea Region](https://interreg-baltic.eu/) (2021-2027).
 
 The authors contributed to the development as follows:
 
-<sup>1,2,3,4</sup> Development
+<sup>1,2,3,4</sup> Coding
 
-<sup>2,5,6</sup> Project management and the management of the development team
+<sup>1,4,5</sup> Requirement elicitation, Design, Demonstration
 
-<sup>1,2,5</sup> Requirement elicitation, Design, Demonstration, Evaluation
+<sup>1,4,5,6</sup> Use testing and Evaluation
 
-<sup>5,6</sup> Development supervision 
+<sup>4,5</sup> Coding team management
+
+<sup>5,7,8</sup> Project management and supervision of development
