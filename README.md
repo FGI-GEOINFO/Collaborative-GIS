@@ -17,7 +17,7 @@ Collaborative GIS (CGIS) is webmap platform intended for collaborative planning.
 For example, the CGIS platform can be used by multiple people working together to discuss, plan, and decide the locations of drone in a box sites, where drones are recharged and stored.
 
 
-**Dependencies**
+## Dependencies
 
 CGIS is built upon the great work done with the repositories Layman and HSLayers. 
 
@@ -30,7 +30,7 @@ HSLayers and HSLayers Server: https://github.com/hslayers/hslayers-ng
 The concept of Collaborative GIS is based on the work done with Baltic Explorer ([BONUS BASMATI, EU](https://bonusbasmati.eu/)). For more information visit http://balticexplorer.eu.
 
 
-**Acknowledgements**
+## Acknowledgements
 
 CGIS was created in the [CITYAM project](https://interreg-baltic.eu/project/cityam/) that contributes to building a green and resilient region with the support of EU funds from the [Interreg Baltic Sea Region](https://interreg-baltic.eu/) (2021-2027). 
 
@@ -38,7 +38,7 @@ CGIS was created in the [CITYAM project](https://interreg-baltic.eu/project/city
 
 We made use of the Collaborative GIS platform provided by the Open Geospatial Information Infrastructure for Research (Geoportti, urn:nbn:fi:research-infras-2016072513) funded by the Research Council of Finland, CSC – IT Center for Science, and other Geoportti consortium members.
 
-**References**
+## References
 
 Rönneberg, M., Jussila, A., & Kettunen, P. (2024). Eliciting user needs of a collaborative GIS for planning urban drone landing sites. Abstracts of the ICA, 8, 20. https://ica-abs.copernicus.org/articles/8/20/2024/ica-abs-8-20-2024.pdf
 
@@ -49,7 +49,7 @@ https://doi.org/10.5194/isprs-archives-XLVIII-2-W11-2025-227-2025
 Honkavaara, Eija; Kettunen, Pyry; Rönneberg, Mikko; Jussila, Anssi et al. 2025. Consolidated geospatial tool for landing site planning and prioritisation. CITYAM Project. https://interreg-baltic.eu/wp-content/uploads/2025/01/CITYAM-O2.1-Consolidated-geospatial-tool-for-landing-site-planning-and-prioritisation.pdf
 
 
-**Authoship**
+## Authoship
 
 Anssi Jussila<sup>1</sup>, Mikko Rönneberg<sup>2</sup>, Leo Niemi<sup>3</sup>, Pyry Kettunen<sup>4</sup>, Eija Honkavaara<sup>5</sup>
 
