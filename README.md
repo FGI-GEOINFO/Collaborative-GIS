@@ -55,7 +55,7 @@ Anssi Jussila<sup>1</sup>, Mikko Rönneberg<sup>2</sup>, Leo Niemi<sup>3</sup>, 
 
 <sup>1,2,3,4,5</sup> Finnish Geospatial Research Institute in the National Land Survey of Finland
 
-Development of the Collaboratibe GIS was made in the INTERREG CITYAM EU project.
+Development of the Collaboratibe GIS was made in the CITYAM project with the support of EU funds from the [Interreg Baltic Sea Region](https://interreg-baltic.eu/) (2021-2027).
 
 The authors contributed to the development as follows:
 
