@@ -1,6 +1,6 @@
-# Collaborative GIS (CGIS)
+# FGI Web Collaborative GIS (CGIS) for CITYAM
 ![Collaborative GIS user interface](https://github.com/FGI-GEOINFO/Collaborative-GIS/blob/main/cgis.png)
-Collaborative GIS (CGIS) is webmap platform intended for collaborative planning. As a Spatial Decision Support System (SDSS) that enables collaborative planning, in CGIS participants can work together on a shared map workspace each on their own devices. The key features of CGIS are:
+FGI Web Collaborative GIS (CGIS) is a web map platform intended for collaborative planning. The CGIS is a redevelopment based on the research demonstrator Baltic Explorer  As a Spatial Decision Support System (SDSS) that enables collaborative planning, in CGIS participants can work together on a shared map workspace each on their own devices. The key features of CGIS are:
 
 * a map user interface (e.g. offering a shared perspective to the planning situation)
 
