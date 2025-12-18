@@ -14,7 +14,7 @@ Collaborative GIS (CGIS) is webmap platform intended for collaborative planning.
 
 * an analysis tool (e.g. running on-the-fly analysis on imported data).
 
-For example, the CGIS platform can be used by multiple people working together to discuss, plan, and decide the locations of drone in a box sites, where drones are recharged and stored.
+The CGIS platform can be used by multiple people working together, for example, to discuss, plan, and decide the locations of drone in a box sites, where drones are recharged and stored.
 
 
 ## Dependencies
