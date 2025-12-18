@@ -59,10 +59,10 @@ Development of the Collaboratibe GIS was made in the INTERREG CITYAM EU project.
 
 The authors contributed to the development as follows:
 
-<sup>1,2,3</sup> Programming
+<sup>1,2,3</sup> Development
 
-<sup>2,4</sup> Managing the project and the development team
+<sup>2,4</sup> Project management and the management of the development team
 
-<sup>1,2,4</sup> Requirement elicitation, Design, Testing, Demonstrating, Evaluating
+<sup>1,2,4</sup> Requirement elicitation, Design, Demonstration, Evaluation
 
-<sup>4,5</sup> Supervising development
+<sup>4,5</sup> Development supervision 
