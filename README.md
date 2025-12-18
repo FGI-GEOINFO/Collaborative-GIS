@@ -59,6 +59,6 @@ The authors contributed to the development as follows:
 
 <sup>2,4</sup> Managing the project and the development team
 
-<sup>1,2,4</sup> Defining requirements, Designing, Usability, Use and user testing
+<sup>1,2,4</sup> Requirement elicitation, Design, Testing, Demonstrating, Evaluating
 
 <sup>4,5</sup> Supervising development
