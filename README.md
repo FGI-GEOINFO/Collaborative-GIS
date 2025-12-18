@@ -51,7 +51,7 @@ Honkavaara, Eija; Kettunen, Pyry; Rönneberg, Mikko; Jussila, Anssi et al. 2025.
 
 ## Authoship
 
-Anssi Jussila<sup>1</sup>, Mikko Rönneberg<sup>2</sup>, Leo Niemi<sup>3</sup>, Pyry Kettunen<sup>4</sup>, Eija Honkavaara<sup>5</sup>
+Anssi Jussila<sup>1</sup>, Mikko Rönneberg<sup>2</sup>, John Hadaway<sup>3</sup>, Leo Niemi<sup>4</sup>, Pyry Kettunen<sup>5</sup>, Eija Honkavaara<sup>6</sup>
 
 <sup>1,2,3,4,5</sup> Finnish Geospatial Research Institute in the National Land Survey of Finland
 
@@ -59,10 +59,10 @@ Development of the Collaboratibe GIS was made in the CITYAM project with the sup
 
 The authors contributed to the development as follows:
 
-<sup>1,2,3</sup> Development
+<sup>1,2,3,4</sup> Development
 
-<sup>2,4</sup> Project management and the management of the development team
+<sup>2,5,6</sup> Project management and the management of the development team
 
-<sup>1,2,4</sup> Requirement elicitation, Design, Demonstration, Evaluation
+<sup>1,2,5</sup> Requirement elicitation, Design, Demonstration, Evaluation
 
-<sup>4,5</sup> Development supervision 
+<sup>5,6</sup> Development supervision 
