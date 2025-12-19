@@ -114,9 +114,9 @@ Docker Engine is an open-source service that can build and containerize applicat
 
 Docker Engine was chosen because of its modularity and isolated environments. The isolated environments inside the containers made it possible to test the application without breaking the Ubuntu environment itself. If the application breaks, it is contained inside the containers. The containers can also be easily rebuilt. The downside is that the development and debugging is more complex especially for users new to docker. It is also possible to build CGIS without the docker containers but it is out of scope of this guide.
 
-CGIS consists of multiple different applications inside their own Docker containers that communicate with each others. To build Docker containers, Docker images are needed. Docker images contain building instruction for creating a Docker container. Docker Compose and YAML files were utilized to make running and controlling containers more easier and streamlined. Makefiles were used to shorten or combine Docker Compose commands.
+CGIS consists of multiple different applications inside their own Docker containers that communicate with each others. To build Docker containers, Docker images are needed. Docker images contain building instruction for creating a Docker container. Docker Compose and YAML files were utilized to make running and controlling containers more easier and streamlined.
 
-In CGIS case, official Docker repository was added to the ubuntu environment. The official Docker repository has the latest version of Docker.
+It is recommended to use official Docker repository since it contains the latest version of docker. This installation guide is for Ubuntu. Do check Docker's own documentation in case there has been changes in the installation guide.
 
 Add docker repository
 Creates a new directory with permission if it doesn’t exist
@@ -204,11 +204,9 @@ Command to manually update the certificate if needed
 sudo certbot renew
 ```
 
-Certbot created a certificate folder, which has to be activated in the web server. In CGIS, the web server is Nginx, which is located inside a docker container. This is why the certificate folder had to copied to the docker container so that the web server is able to find the certificate. Docker volume bind was utilized inside a YAML configuration file to copy the folder and its contents to the docker container. The nginx configuration file was modified to listen to port 443 and to find the location of the certificate.
+Certbot created a certificate folder, which has to be activated in the web server. In CGIS, the web server is Nginx, which is located inside a docker container. The certificate folder is mounted from the host to the container. Docker compose and YAML configuration file is utilized for the mounting process. The Nginx configuration file was modified to listen HTTPS port 443 and by adding the certificate folder's path.
 
-To update certificate in CGIS one needs to be open HTTP (80) port, comment HTTP block and uncomment listen 80 lines in HTTPS block in Nginx configuration file. One can also try using the nginx-certificate-renew nginx configuration file github for faster testing.
-
-It is recommended to find a better way to update the certificate. Currently it needs quite a lot of manual work. Nginx configuration should be changed so that it would always work when updating the certificate. There is also the problem that Docker doesn’t recognize when the certificate has been updates. It seems that the updated certificate isn’t copied inside the Nginx docker container for some reason. The Nginx docker container has to be restarted for the update to take effect. The problem might be related to folder permissions.
+In CGIS, updating the certificate has to be done manually. The HTTP port is temporarily made public and the Nginx configuration file is modified to work during the update process. In the GitHub repository the nginx-certficate-renew configuration file is the modified version. It is recommended to find a better way to update the certificate. Nginx configuration should be changed so that it would always work when updating the certificate. There is also the problem that Docker doesn’t recognize when the certificate has been updated. It seems that the updated certificate isn’t copied inside the Nginx docker container for some reason. The docker container has to be restarted for the update to take effect. The problem might be related to folder permissions.
 
 ## Layman (LayerManager)
 Layman is a publishing server for geospatial data via a REST API. The server creates OGC WMS and WFS APIs from the published data. The server accepts vector and raster data and also layer styling formats. There is also an authentication service, which makes it possible to create users and handle data permissions. Layman server is built on top of many different components like Docker, Python, Flask, PostgreSQL, PostGIS, GDAL, QGIS Server, GeoServer, OpenLayers, Celery, Redis, etc. In table 2 can be seen all layman related components that are running inside docker containers in CGIS server.
@@ -251,7 +249,7 @@ git checkout $(git describe --abbrev=0 --tags)
 -> v 1.23.0
 ```
 
-Before Layman can be built the service has to be configured. There are multiple files that have to be modified for the system to work. The filepaths for files that were modified in this project can be seen in Table 3. The modified files are also available in the GitHub folders. The files have been cleaned from actual paths and replaced with placeholders.
+Before Layman can be built the service has to be configured. There are multiple files that have to be modified for the system to work. The filepaths for files that were modified in this project can be seen in Table 3. The modified files are also available in the GitHub repository. The files have been cleaned from actual paths and replaced with placeholders.
 
 | Layman file | Description |
 | ------------- | ------------- |
@@ -263,20 +261,20 @@ Before Layman can be built the service has to be configured. There are multiple 
 _Table 3: Layman files that were modified in CGIS_
 
 Makefile:\
-In this project, makefile was utilized to make easier building docker containers. Makefile is a configuration file that can be used with make command. In this case, docker compose commands were configured into a makefile and then ran using the make command. With this it is possible to build the CGIS platform using single short command line argument.
+Makefile was utilized to make building of docker containers easier and more streamlined. Docker compose commands were configured into a makefile and then run using make command. With this it is possible to build the CGIS platform using single short command line arguments.
 
 Example:
 ```bash
 sudo make start-prototype
 ```
 Layman environment file:\
-The environment file contains parameters that are used when building and running the docker containers. The .env.dev was used as a base and then filled with values that correspond to the CGIS server. See .env file in github repostiory for CGIS platform environment file.
+The environment file contains parameters that are used when building and running the docker containers. The .env.dev was used as a base and then filled with values that correspond to the CGIS server.
 
 Wagtail laymanportal:\
-The dev.py is a Python file, which is used by wagtail administrator system. The file contains security related parameters. It will also control what sites Django can serve. The file was modified so that requests with POST also work. In Django administration page redirect uris were added for callback URLs. In addition, access tokens for analysis users were added with years long expiration dates. These tokens were needed to verify the logged user during the analysis. If the user cannot be verified, the analysis results cannot be transferred to geoserver. In the future the tokens should be removed from the analysis script and do the authentication from the script in a proper way.
+The dev.py is a Python file, which is used by wagtail administrator system. The file contains security related parameters. It will also control what sites Django can serve. The file was modified so that requests with POST also work. In Django administration page redirect uris were added for callback URLs.
 
 Nginx configuration file:\
-NGINX web server configuration file is for redirecting web traffic and security settings. HTTPS certificate folder’s path inside the docker container was added to the configuration file, which makes using https addresses possible. Most components of backend and frontend were added as location blocks. This makes it possible to access the applications using a URL. (Example: REST API, map interface, etc). There are also security related settings that were needed for embedded login and authentication to work.
+The configuration file handles both web traffic redirection and security settings. It contains HTTPS sertificate path, which makes it possible to usage of HTTPS addresses possible. Most components of backend and frontend are added as location blocks, which makes it possible for the containers to communicate with each other and access certain parts using a URL (Example: REST API, map interface, etc). There are also security related settings that were needed for embedded login and authentication to work.
 
 > [!WARNING]
 In this version, the geoserver has secrity vulnerabilities, which is why it should not be available publicly. It is highly recommended to get a newer version of the Geoserver.
@@ -287,7 +285,7 @@ HSLayers-server is a server component for the HSLayers map application. The serv
 Link to the HsLayers-server repository:
 https://github.com/hslayers/hslayers-ng/tree/develop/projects/hslayers-server
 
-The HSLayers-server was installed and ran inside a docker container. The installation and execution of the application was done utilizing a Dockerfile. In addition, for the application to run properly an environment file is needed. The file is created inside Ubuntu environment and then moved inside the docker container using volume bind. A YAML file is modified to include and control the HSLayers-server. Necessary ports and volume bind are added to the file.
+In CGIS, HSLayers-server is run inside a docker container. A Dockerfile and an environment file are needed for the creation of the Docker image and container. Dockerfile contains the build instructions of the container and .env file the configuration of the application. HSLayers-server configuration parameters were added to a YAML configuration file (volume binds, ports, etc).
 
 Current version of HSLayers-server in CGIS:\
 2.0.0
@@ -316,7 +314,7 @@ ng generate application development
 ng generate application production
 ```
 
-The workspace is a folder location that is created using Angular ng new command. The root structure contains workspace related information like installed libraries, dependencies, project related configuration options, etc. Node_modules folder contains installed libraries needed for developing the web application. Angular.json is contains information to control and configure the project itself. A single-application workspace, the files related to the app itself are stored in src folder. In multi-application workspace, the application files are organized inside the projects folder, where each application has its own directory.
+The workspace is a folder location that is created using Angular ng new command. The root structure contains workspace related information like installed libraries, dependencies, project related configuration options, etc. Node_modules folder contains installed libraries needed for developing the web application. Angular.json is contains information to control and configure the project itself. In a single-application workspace, the files related to the app itself are stored in src folder. In multi-application workspace, the application files are organized inside the projects folder, where each application has its own directory.
 
 Install newest HsLayers package
 ```bash
@@ -333,7 +331,7 @@ Install peer dependencies for HsLayers 13.2.1 if not installed automatically by 
 npm i bootstrap@^5.3 ol@^8.2 @angular/cdk@^17 @angular/common@^17 @angular/core@^17 @angular/forms@^17 @angular/compiler@^17 @angular/platform-browser@^17 @angular/platform-browser-dynamic@^17 @angular/localize@^17 @ngx-translate/core@^15 @ngx-translate/http-loader@^8 deepmerge@^4.0.0 dayjs@^1.0.0 @ng-bootstrap/ng-bootstrap@^16 ol-popup@^5.0.0 proj4@^2.8.1 share-api-polyfill@^1.0.0 rxjs@^7.0.0 zone.js@~0.14.0 xml-js@^1.6.11 ngx-cookie-service@^17 geostyler-style@^7.2.0 geostyler-sld-parser@^5 geostyler-openlayers-parser@^4 geostyler-legend@4 geostyler-qgis-parser@^2 ngx-color@^9 queue@^7 resumablejs@^1 d3@^7 jszip@^3 polygon-splitter@^0.0.11 polygon-clipping@^0.15.3 @popperjs/core@^2 ol-ext@^4
 ```
 
-For testing and further development, CGIS HSLayers scripts can be used as a template. In the app folder are the main scripts that determine te graphical user interface of CGIS and extra components inside their own folders. The extra components are analysis, login and help panel. The analysis directory contains script for the graphical user interface of the analysis panel and components to connect to the analysis plugin. Login directory scripts create a login panel where the user can login to the system. The help directory creates a help panel which describes the hwo to use CGIS.
+HSLayers scripts for CGIS can be used as a template for testing and further development. The app folder contents can be categorized into four categories. At the root of the folder are the scripts related to main graphical user interface of CGIS. The app folder also contains folders for analysis, login and help panels. The analysis directory contains script for the graphical user interface of the analysis panel and components to connect to the analysis plugin. Login directory scripts create a login panel where the user can login to the system. The help directory creates a help panel which describes how to use CGIS.
 
 Run Angular application in development environment
 ```bash
@@ -345,14 +343,14 @@ Build Angular application after development
 ng build development
 ```
 
-Building Angular application compiles the scripts into optimized and minified output into dist directory. In CGIS the built application is copied to the Nginx container so that the web server can find and access the application. The necessary parameters for copying are added in Docker compose YAML file. It should also be mentioned that every time build is done, it generates a cache in the working directory. The cache stores information related to the build, which makes following builds faster. Generation of cache canbe toggled on or off. The caches were not automatically removed at least in this project. This means the more building is done the more disk space the cahes take. It is recommended to remove old caches when they take too much dish space.
+Building Angular application compiles the scripts into optimized and minified output into dist directory. In CGIS the built application is copied to the Nginx container so that the web server can find and access the application. The necessary parameters for copying are added in YAML configuration file. It should also be mentioned that every time build is done, it generates a cache in the working directory. The cache stores information related to the build, which makes following builds faster. Generation of cache can be toggled on or off. The caches were not automatically removed in this project. This means the more building is done, the more disk space the caches take. It is recommended to remove old caches when they take too much dish space.
 
 ## Drone landing site analysis tool
-The drone landing site analysis tool is a plugin that was developed for CGIS. The tools is a multi-layer analysis to detect potential drone landing sites from selected datasets. The tool was designed to act as a guide for discussing and planning drone landing sites. The quality of the results is highly dependant on the amount, type and quality of data used.
+The drone landing site analysis tool is a plugin that was developed to work with CGIS. The tools is a multi-layer analysis to detect potential drone landing sites from selected datasets. The tool was designed to act as a guide for discussing and planning drone landing sites. The quality of the results is highly dependant on the amount, type and quality of data used.
 
 The analysis tool is activated through the frontend web application (HsLayers), which sends a signal to the backend analysis component to start the analysis process. The script check’s the user’s credentials to determine if the user has right permissions to run the analysis. The analysis reads and loads the data from the CGIS server and inserts the data into the multi-layer analysis. The analysis creates a raster from the input data and sends it to the geoserver.
 
-The analysis tool was designed to run inside a docker container. The tool was cloned from a GitHub repository and containerized. A dockerfile was created for the containerization process. A YAML file was modified to activate and copy necessary files to the container.
+The plugin was developed using Python programming language. After the plugin had been developed, a Dockerfile was created for the containerization process. Parameters related to the plugin were added to an existing YAML configuration file. 
 
 ## Creating user accounts
 In CGIS two types of accounts can be created, which are normal and analysis users. Normal users can view, create workspaces and data but cannot use the analysis tool. Analysis user can do the same things as normal user and in addition use the analysis tool.
@@ -361,7 +359,7 @@ Normal users:\
 New users are created from wagtail website. An user (eg. layman) who has administrative permissions should be used to create new users. To create a user, in wagtail go to settings, users and then use add user command. In account tab add necessary information like account name, email, password, etc. In roles tab, the new users are added to moderators and editors groups. These groups affect what the users can do in CGIS.
 
 Analysis users:\
-Create the user in similar fashion as when creating a normal user. In django log in with an administrative account (eg. layman). Navigate to access tokens tab and add a new access token. In the token settings, find the created analysis user, create a custom token, set layman-test-client as application, set the expiration date of the token and in scope add read write text. The created token's custom token value has to be added to the analysis plugin. Navigate to the analysis folder and search for views.py script. In the script search for code lines that contain data["workspace"] and auth_token. The workspace values should be the name of the analysis account and auth_token value the custom token value that was added in django. Test the created analysis user to confirm that everything works as expected.
+Create the user in similar fashion as when creating a normal user. In django log in with an administrative account (eg. layman). Navigate to access tokens tab and add a new access token. In the token settings, find the created analysis user, create a custom token, set _layman-test-client_ as _application_, set the _expiration date_ of the token and in _scope_ add _read write_ text. The created token's custom token value has to be added to the analysis plugin. Navigate to the analysis folder and search for views.py script. In the script search for code lines that contain data["workspace"] and auth_token. The workspace values should be the name of the analysis account and auth_token value the custom token value that was added in django. Test the created analysis user to confirm that everything works as expected.
 
 > [!NOTE]
 Each analysis user needs an access token for the analysis to work. Currently this can only be done by manually adding the access token to the analysis script, which is not ideal. It is recommended to get the authentication to work properly in the analysis scripts. Most likely HsLayer-server could be used to access the authentication service of layman.
