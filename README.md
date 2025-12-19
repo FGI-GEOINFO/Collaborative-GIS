@@ -32,6 +32,11 @@ CGIS is primarily built upon the following repositories:
 
 The FGI Web Collaborative GIS is based on the research and development of Baltic Explorer (http://balticexplorer.eu; https://github.com/FGI-GEOINFO/Baltic-Explorer) in the BONUS BASMATI project (https://bonusbasmati.eu/).
 
+## Installation
+
+To install CGIS on a server please follow the [installation guide](https://github.com/FGI-GEOINFO/Collaborative-GIS/blob/main/installation.md).
+
+At least basic knowlesge of server management, NVM, Angular, and Docker are required. Do note the minimum of 8 GiB RAM requirement.
 
 ## Acknowledgements
 
